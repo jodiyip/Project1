@@ -27,7 +27,6 @@ def getData(file):
 		# adds each item of the dictionary into a list
 		lst.append(dictionary)
 	return lst
-# data1 = getData("P1DataA.csv")
 # get a list of dictionary objects from the file
 #Input: file name
 #Ouput: return a list of dictionary objects where
@@ -49,16 +48,15 @@ def mySort(data,col):
 #Output: Return the first item in the sorted list as a string of just: firstName lastName
 
 
-
 def classSizes(data):
-	"""This function 
-
+	"""This function counts the number of students in each class 
+	and lists them in descending order
 	"""
 	freshman = 0
 	sophomore = 0
 	junior = 0
 	senior = 0
-	# creates a 
+	# increases individual class count and adds number into tuple
 	for person in data:
 		if person['Class'] == "Freshman":
 			freshman += 1
@@ -72,7 +70,8 @@ def classSizes(data):
 		if person['Class'] == "Senior":
 			senior += 1
 			seniorTuple = ('Senior', senior)
-
+	# adds individual class tuple into a list and sorts 
+	# number of students in that class in descending order
 	lst = [freshmanTuple, sophomoreTuple, juniorTuple, seniorTuple]
 	lst.sort(key=lambda tup:tup[1], reverse=True)
 	return(lst)
@@ -85,16 +84,20 @@ def classSizes(data):
 
 
 def findMonth(a):
+	""" This function finds and returns the most common month in the data"""
 	counts = dict()
 	for person in a:
 		# person is a dictionary 
 		birthday = person['DOB'].split("/")
+		# indexes to the month of dob and increases count by 1 when 
+		# month matches value in dictionary
 		for date in birthday:
 			month = birthday[0]
 			if month not in counts:
 				counts[month] = 1
 			else:
 				counts[month] += 1
+	# finds largest count and returns the month key associated
 	maxCount = max(counts.values())
 	for key in counts.keys():
 		if counts[key] == maxCount:
@@ -107,9 +110,13 @@ def findMonth(a):
 
 
 def mySortPrint(a,col,fileName):
+	"""This function sorts the data by column and saves data 
+	into a csv file by first name, last name, and email
+	"""
+	# opens file and sorts column alphabetically 
 	outfile = open(fileName, 'w')
 	sort = sorted(a, key = lambda k: k[col])
-	# line = sort[]
+	# saves and writes each person individually by first, last and email into csv file
 	for student in sort:
 		firstName = student['First']
 		lastName = student['Last']
@@ -125,19 +132,22 @@ def mySortPrint(a,col,fileName):
 
 
 def findAge(a):
+	"""This function returns the average age of students by using the 
+	student's birthday and current date in years
+	"""
 	lst = list()
+	# find each student's dob and subtracts it from current year(2018)
 	for person in a:
 		birthday = person['DOB'].split("/")
-		# print(birthday)
 		year = birthday[2]
 		yearCut = int(year[0:4])
 		age = 2018 - yearCut
 		lst.append(age)
-	# average = int(reduce(lambda x, y: x+y, 1) / len(1))
+	# finds average by dividing sum of values in list by number of digits in list
 	average = sum(lst) / len(lst)
 	return round(average)
-# findAge(data1)
-# # def findAge(a):
+
+# def findAge(a):
 # Input: list of dictionaries
 # Output: Return the average age of the students and round that age to the nearest
 # integer.  You will need to work with the DOB and the current date to find the current
