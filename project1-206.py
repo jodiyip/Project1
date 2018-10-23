@@ -5,56 +5,144 @@ from datetime import date
 
 
 def getData(file):
+	"""This function takes in a file and returns a list of dictionary objects
+	with keys first name, last name, email, class and dob. The values are 
+	individual data found in the columns"""
+	inFile = open(file, "r")
+	lines = inFile.readlines()
+	# inFile.close()
+	lst = list()
+	lineSlice = lines[1:]
+	for line in lineSlice:
+		# creates a dictionary and adds the first name, 
+		# last name, email, class, and date of birth
+		dictionary = dict()
+		finalWords = line.split(",")
+		dictionary['First'] = finalWords[0]
+		dictionary['Last'] = finalWords[1]
+		dictionary['Email'] = finalWords[2]
+		dictionary['Class'] = finalWords[3]
+		dictionary['DOB'] = finalWords[4]
+		# each person is a dicionary
+		# adds each item of the dictionary into a list
+		lst.append(dictionary)
+	return lst
+# data1 = getData("P1DataA.csv")
 # get a list of dictionary objects from the file
 #Input: file name
 #Ouput: return a list of dictionary objects where
 #the keys are from the first row in the data. and the values are each of the other rows
 
-	pass
 
 def mySort(data,col):
-# Sort based on key/column
+	"""This function alphabetically sorts either the first name column or the last name 
+	column. It returns the first and last name of the first item after sorting as a string.
+	"""
+	# alphabatizes the column col
+	sort = sorted(data, key = lambda k:k[col])
+	# gets and returns the first and last name on the first row
+	sortFirst = sort[0]
+	return sortFirst['First'] + ' ' + sortFirst['Last']
+
+# Sort based on  key/column
 #Input: list of dictionaries and col (key) to sort on
 #Output: Return the first item in the sorted list as a string of just: firstName lastName
 
-	pass
 
 
 def classSizes(data):
+	"""This function 
+
+	"""
+	freshman = 0
+	sophomore = 0
+	junior = 0
+	senior = 0
+	# creates a 
+	for person in data:
+		if person['Class'] == "Freshman":
+			freshman += 1
+			freshmanTuple = ('Freshman', freshman)
+		if person['Class'] == "Sophomore":
+			sophomore += 1
+			sophomoreTuple = ('Sophomore', sophomore)
+		if person['Class'] == "Junior":
+			junior += 1
+			juniorTuple = ('Junior', junior)
+		if person['Class'] == "Senior":
+			senior += 1
+			seniorTuple = ('Senior', senior)
+
+	lst = [freshmanTuple, sophomoreTuple, juniorTuple, seniorTuple]
+	lst.sort(key=lambda tup:tup[1], reverse=True)
+	return(lst)
 # Create a histogram
 # Input: list of dictionaries
 # Output: Return a list of tuples sorted by the number of students in that class in
 # descending order
 # [('Senior', 26), ('Junior', 25), ('Freshman', 21), ('Sophomore', 18)]
 
-	pass
 
 
 def findMonth(a):
+	counts = dict()
+	for person in a:
+		# person is a dictionary 
+		birthday = person['DOB'].split("/")
+		for date in birthday:
+			month = birthday[0]
+			if month not in counts:
+				counts[month] = 1
+			else:
+				counts[month] += 1
+	maxCount = max(counts.values())
+	for key in counts.keys():
+		if counts[key] == maxCount:
+			return int(key)
+		
 # Find the most common birth month form this data
 # Input: list of dictionaries
 # Output: Return the month (1-12) that had the most births in the data
 
-	pass
+
 
 def mySortPrint(a,col,fileName):
+	outfile = open(fileName, 'w')
+	sort = sorted(a, key = lambda k: k[col])
+	# line = sort[]
+	for student in sort:
+		firstName = student['First']
+		lastName = student['Last']
+		email = student['Email']
+		outfile.write("{},{},{}\n".format(firstName, lastName, email))
+	outfile.close()
+
 #Similar to mySort, but instead of returning single
 #Student, the sorted data is saved to a csv file.
 # as fist,last,email
 #Input: list of dictionaries, col (key) to sort by and output file name
 #Output: No return value, but the file is written
 
-	pass
 
 def findAge(a):
-# def findAge(a):
+	lst = list()
+	for person in a:
+		birthday = person['DOB'].split("/")
+		# print(birthday)
+		year = birthday[2]
+		yearCut = int(year[0:4])
+		age = 2018 - yearCut
+		lst.append(age)
+	# average = int(reduce(lambda x, y: x+y, 1) / len(1))
+	average = sum(lst) / len(lst)
+	return round(average)
+# findAge(data1)
+# # def findAge(a):
 # Input: list of dictionaries
 # Output: Return the average age of the students and round that age to the nearest
 # integer.  You will need to work with the DOB and the current date to find the current
 # age in years.
-
-	pass
-
+		
 
 ################################################################
 ## DO NOT MODIFY ANY CODE BELOW THIS
@@ -74,6 +162,7 @@ def test(got, expected, pts):
 
 # Provided main() calls the above functions with interesting inputs, using test() to check if each result is correct or not.
 def main():
+	getData('P1DataA.csv')
 	total = 0
 	print("Read in Test data and store as a list of dictionaries")
 	data = getData('P1DataA.csv')
